@@ -199,13 +199,10 @@ export default class App extends Component {
     let timer = BackgroundTimer.setInterval(async () => {
       currentVolume = await SystemSetting.getVolume(this.state.volType);
       if (this.state.increaseFlag) {
-        // var temp = currentVolume;
         currentVolume = currentVolume + value + 0.01;
-        // Alert.alert('2', String(temp) + '\n' + String(currentVolume));
       } else {
         currentVolume -= value;
       }
-      // Alert.alert('1', String(currentVolume));
       if (currentVolume <= 0.05) {
         this._changeVol(0);
         this.setState({
@@ -305,7 +302,6 @@ export default class App extends Component {
         <View style={styles.title}>
           <Text style={{fontSize: 30, color: 'white'}}>지금은,</Text>
           <Text style={{fontSize: 25, color: 'white'}}>
-            {/* {this.state.signStatus == '감소' ? <Text>감소</Text> : null} */}
             {this.state.status}
           </Text>
         </View>
@@ -328,13 +324,6 @@ export default class App extends Component {
                   borderWidth: 0,
                   marginLeft: 0,
                 }}
-                // title="감소"
-                // textStyle={{
-                //   fontSize: 15,
-                //   fontWeight: '100',
-                //   color: 'white',
-                // }}
-                // disabled={this.state.flag}
                 checked={this.state.increaseFlag}
                 onPress={() => this._onPushIncreaseButton()}
                 checkedColor="white"
@@ -357,10 +346,7 @@ export default class App extends Component {
                   marginRight: 0,
                   paddingRight: 0,
                 }}
-                // disabled={this.state.flag}
                 checked={this.state.decreaseFlag}
-                // checkedIcon="check-square-o"
-                // uncheckedIcon="square-o"
                 onPress={() => this._onPushDecreaseButton()}
                 checkedColor="white"
               />
@@ -369,8 +355,6 @@ export default class App extends Component {
           <View style={styles.content_1}>
             <Text style={styles.text_1}>시간</Text>
             <TextInput
-              // placeholder="60"
-              // placeholderTextColor="white"
               style={styles.inputBox}
               onChangeText={second => this.setState({second})}
               value={this.state.second}
@@ -380,18 +364,12 @@ export default class App extends Component {
           <View style={styles.content_1}>
             <Text style={styles.text_1}>음량</Text>
             <TextInput
-              // placeholder="1"
-              // placeholderTextColor="white"
               style={styles.inputBox}
               onChangeText={_volume => this.setState({_volume})}
               value={this.state._volume}
               keyboardType={'numeric'}
             />
           </View>
-          {/* <Image
-            style={{height: '100%', width: '100%', resizeMode: 'contain'}}
-            source={require('./img.jpg')}
-          /> */}
         </View>
         <View style={styles.explanation}>
           <Text style={{fontSize: 14, color: 'white'}}>
