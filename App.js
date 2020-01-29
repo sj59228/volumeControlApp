@@ -126,6 +126,31 @@ export default class App extends Component {
       );
       return;
     }
+    if (this.state.second < 0) {
+      Alert.alert(
+        '경고',
+        '0보다 큰 숫자를 입력해주세요!',
+        [
+          {
+            text: '넹',
+          },
+        ],
+        {cancelable: true},
+      );
+      return;
+    } else if (this.state._volume < 0) {
+      Alert.alert(
+        '경고',
+        '0보다 큰 숫자를 입력해주세요!',
+        [
+          {
+            text: '넹',
+          },
+        ],
+        {cancelable: true},
+      );
+      return;
+    }
     if (this.state.second == 0 || this.state._volume == 0) {
       Alert.alert(
         '경고',
@@ -139,24 +164,34 @@ export default class App extends Component {
       );
       return;
     }
+    // if (/^\d+$/.test(this.state.second.toString())) {
+    //   Alert.alert(
+    //     '경고',
+    //     '0보다 큰 숫자를 입력해주세요!',
+    //     [
+    //       {
+    //         text: '넹',
+    //       },
+    //     ],
+    //     {cancelable: true},
+    //   );
+    //   return;
+    // }
+
     Alert.alert(
       '시작',
       `${this.state.second}초마다 ${this.state._volume}씩 음량을 ${this.state.signStatus}합니다`,
       [
         {
-          text: '아니오',
-        },
-        {
-          text: '네',
-          onPress: () => {
-            this._onStartVolumeControl();
-            var status = '음량이 ' + this.state.signStatus + '하고 있습니다';
-            this.setState({flag: true, status: status});
-          },
+          text: '넹',
         },
       ],
       {cancelable: true},
     );
+
+    this._onStartVolumeControl();
+    var status = '음량이 ' + this.state.signStatus + '하고 있습니다';
+    this.setState({flag: true, status: status});
   }
 
   _stopButton() {
@@ -284,6 +319,7 @@ export default class App extends Component {
         ],
         {cancelable: true},
       );
+      return;
     }
     if (!this.state.decreaseFlag) {
       this.setState({
@@ -292,6 +328,16 @@ export default class App extends Component {
         decreaseFlag: !this.state.decreaseFlag,
       });
     }
+  }
+  _onChangeSecond(second) {
+    this.setState({
+      second: second.replace(/[^0-9]/g, ''),
+    });
+  }
+  _onChangeVolume(_volume) {
+    this.setState({
+      _volume: _volume.replace(/[^0-9]/g, ''),
+    });
   }
 
   render() {
@@ -356,18 +402,21 @@ export default class App extends Component {
             <Text style={styles.text_1}>시간</Text>
             <TextInput
               style={styles.inputBox}
-              onChangeText={second => this.setState({second})}
+              onChangeText={second => this._onChangeSecond(second)}
+              // this.setState({second});
               value={this.state.second}
               keyboardType={'numeric'}
+              maxLength={20}
             />
           </View>
           <View style={styles.content_1}>
             <Text style={styles.text_1}>음량</Text>
             <TextInput
               style={styles.inputBox}
-              onChangeText={_volume => this.setState({_volume})}
+              onChangeText={_volume => this._onChangeVolume(_volume)}
               value={this.state._volume}
               keyboardType={'numeric'}
+              maxLength={20}
             />
           </View>
         </View>
