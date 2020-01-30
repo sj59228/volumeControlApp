@@ -131,12 +131,9 @@ android {
         applicationId "com.pusyung"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 111
+        versionName "1.1.1"
     }
-    //def enableSeparateBuildPerCPUArchitecture = true    // 추가 코드
-
-    //def enableProguardInReleaseBuilds = true            // 추가 코드
     splits {
         abi {
             reset()

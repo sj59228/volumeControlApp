@@ -3,15 +3,18 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
   StatusBar,
   Alert,
   TextInput,
+  ToastAndroid,
+  BackHandler,
 } from 'react-native';
+// import Loading from './Loading';
 import CustomButton from './CustomButton';
 import {CheckBox} from 'react-native-elements';
 import SystemSetting from 'react-native-system-setting';
 import BackgroundTimer from 'react-native-background-timer';
+import SplashScreen from 'react-native-splash-screen';
 
 export default class App extends Component {
   volumeListener = null;
@@ -33,10 +36,14 @@ export default class App extends Component {
     };
   }
   async componentDidMount() {
+    setTimeout(() => {
+      SplashScreen.hide();
+    }, 200);
+
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
     this.setState({
       volume: await SystemSetting.getVolume(this.state.volType),
     });
-
     this.volumeListener = SystemSetting.addVolumeListener(data => {
       const volume = this.isAndroid ? data[this.state.volType] : data.value;
       this.setState({
@@ -46,9 +53,34 @@ export default class App extends Component {
   }
 
   componentWillUnmount() {
+    this.exitApp = false;
     SystemSetting.removeListener(this.volumeListener);
     BackgroundTimer.clearInterval(this.state.timer);
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
   }
+
+  handleBackButton = () => {
+    // 2000(2초) 안에 back 버튼을 한번 더 클릭 할 경우 앱 종료
+    if (this.exitApp == undefined || !this.exitApp) {
+      ToastAndroid.show(
+        '한번 더 누르면 실행이 멈추고 종료됩니다.',
+        ToastAndroid.SHORT,
+      );
+      this.exitApp = true;
+
+      this.timeout = setTimeout(
+        () => {
+          this.exitApp = false;
+        },
+        2000, // 2초
+      );
+    } else {
+      clearTimeout(this.timeout);
+
+      BackHandler.exitApp(); // 앱 종료
+    }
+    return true;
+  };
 
   _changeVol(value) {
     SystemSetting.setVolume(value, {
@@ -164,19 +196,6 @@ export default class App extends Component {
       );
       return;
     }
-    // if (/^\d+$/.test(this.state.second.toString())) {
-    //   Alert.alert(
-    //     '경고',
-    //     '0보다 큰 숫자를 입력해주세요!',
-    //     [
-    //       {
-    //         text: '넹',
-    //       },
-    //     ],
-    //     {cancelable: true},
-    //   );
-    //   return;
-    // }
 
     Alert.alert(
       '시작',
@@ -188,7 +207,6 @@ export default class App extends Component {
       ],
       {cancelable: true},
     );
-
     this._onStartVolumeControl();
     var status = '음량이 ' + this.state.signStatus + '하고 있습니다';
     this.setState({flag: true, status: status});
@@ -403,7 +421,6 @@ export default class App extends Component {
             <TextInput
               style={styles.inputBox}
               onChangeText={second => this._onChangeSecond(second)}
-              // this.setState({second});
               value={this.state.second}
               keyboardType={'numeric'}
               maxLength={20}
@@ -454,13 +471,11 @@ const styles = StyleSheet.create({
   header: {
     width: '100%',
     height: '5%',
-    // height: '7%',
     backgroundColor: 'black',
   },
   title: {
     width: '100%',
     height: '18%',
-    // height: '20%',
     justifyContent: 'center',
     backgroundColor: 'black',
     paddingBottom: 30,
@@ -476,7 +491,6 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     justifyContent: 'center',
-    // alignItems: 'center',
     paddingTop: 10,
     paddingBottom: 60,
     paddingLeft: 10,
