@@ -5,13 +5,12 @@ import {
   View,
   StatusBar,
   Alert,
-  TextInput,
   ToastAndroid,
   BackHandler,
 } from 'react-native';
-// import Loading from './Loading';
 import CustomButton from './CustomButton';
-import {CheckBox} from 'react-native-elements';
+import CustomCheckBox from './CustomCheckBox';
+import CustomTextInput from './CustomTextInput';
 import SystemSetting from 'react-native-system-setting';
 import BackgroundTimer from 'react-native-background-timer';
 import SplashScreen from 'react-native-splash-screen';
@@ -347,6 +346,7 @@ export default class App extends Component {
       });
     }
   }
+
   _onChangeSecond(second) {
     this.setState({
       second: second.replace(/[^0-9]/g, ''),
@@ -372,73 +372,39 @@ export default class App extends Component {
         <View style={styles.content}>
           <View style={styles.content_0}>
             <View style={{flexDirection: 'row'}}>
-              <Text
-                style={{
-                  fontSize: 14,
-                  color: 'white',
-                  paddingTop: 16,
-                  right: 0,
-                }}>
-                증가
-              </Text>
-              <CheckBox
-                activeOpacity={1}
-                containerStyle={{
-                  backgroundColor: 'transparent',
-                  borderWidth: 0,
-                  marginLeft: 0,
-                }}
-                checked={this.state.increaseFlag}
-                onPress={() => this._onPushIncreaseButton()}
-                checkedColor="white"
+              <Text style={styles.text_0}>증가</Text>
+              <CustomCheckBox
+                _marginRight={12}
+                _paddingRight={12}
+                _checked={this.state.increaseFlag}
+                _onPress={() => this._onPushIncreaseButton()}
               />
-              <Text
-                style={{
-                  fontSize: 14,
-                  color: 'white',
-                  paddingTop: 16,
-                  right: 0,
-                }}>
-                감소
-              </Text>
-              <CheckBox
-                activeOpacity={1}
-                containerStyle={{
-                  backgroundColor: 'transparent',
-                  borderWidth: 0,
-                  marginLeft: 0,
-                  marginRight: 0,
-                  paddingRight: 0,
-                }}
-                checked={this.state.decreaseFlag}
-                onPress={() => this._onPushDecreaseButton()}
-                checkedColor="white"
+              <Text style={styles.text_0}>감소</Text>
+              <CustomCheckBox
+                _marginRight={0}
+                _paddingRight={0}
+                _checked={this.state.decreaseFlag}
+                _onPress={() => this._onPushDecreaseButton()}
               />
             </View>
           </View>
           <View style={styles.content_1}>
             <Text style={styles.text_1}>시간</Text>
-            <TextInput
-              style={styles.inputBox}
-              onChangeText={second => this._onChangeSecond(second)}
-              value={this.state.second}
-              keyboardType={'numeric'}
-              maxLength={20}
+            <CustomTextInput
+              _onChangeText={second => this._onChangeSecond(second)}
+              _value={this.state.second}
             />
           </View>
           <View style={styles.content_1}>
             <Text style={styles.text_1}>음량</Text>
-            <TextInput
-              style={styles.inputBox}
-              onChangeText={_volume => this._onChangeVolume(_volume)}
-              value={this.state._volume}
-              keyboardType={'numeric'}
-              maxLength={20}
+            <CustomTextInput
+              _onChangeText={_volume => this._onChangeVolume(_volume)}
+              _value={this.state._volume}
             />
           </View>
         </View>
         <View style={styles.explanation}>
-          <Text style={{fontSize: 14, color: 'white'}}>
+          <Text style={styles.explanationText}>
             ※ 현재 음량 :{' '}
             {Math.round(Math.floor(this.state.volume * 100) / 6.7)} {'\n'}※
             소리가 {this.state.second}
@@ -488,6 +454,10 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingBottom: 25,
   },
+  explanationText: {
+    fontSize: 14,
+    color: 'white',
+  },
   content: {
     flex: 1,
     justifyContent: 'center',
@@ -496,6 +466,12 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
     backgroundColor: 'black',
+  },
+  text_0: {
+    fontSize: 14,
+    color: 'white',
+    paddingTop: 16,
+    right: 0,
   },
   content_0: {
     justifyContent: 'flex-end',
@@ -516,17 +492,6 @@ const styles = StyleSheet.create({
   text_1: {
     color: 'white',
     fontSize: 30,
-  },
-  inputBox: {
-    borderColor: '#aaa',
-    color: 'white',
-    fontSize: 21,
-    width: '70%',
-    height: 40,
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingLeft: 7,
-    padding: 5,
   },
   footer: {
     width: '100%',
