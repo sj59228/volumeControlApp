@@ -11,6 +11,8 @@ import {
 import CustomButton from './CustomButton';
 import CustomCheckBox from './CustomCheckBox';
 import CustomTextInput from './CustomTextInput';
+import AdBannerBottom from './AdBannerBottom';
+
 import SystemSetting from 'react-native-system-setting';
 import BackgroundTimer from 'react-native-background-timer';
 import SplashScreen from 'react-native-splash-screen';
@@ -423,6 +425,9 @@ export default class App extends Component {
             onPress={this._stopButton.bind(this)}
           />
         </View>
+        <View style={styles.ad}>
+          <AdBannerBottom />
+        </View>
       </View>
     );
   }
@@ -497,5 +502,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '20%',
     backgroundColor: 'black',
+  },
+  ad: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
